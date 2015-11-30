@@ -2,7 +2,8 @@ var gulp        = require('gulp'),
     sass        = require('gulp-sass'),
     jade        = require('gulp-jade'),
     minifyCss   = require('gulp-minify-css'),
-    browserSync = require('browser-sync').create();
+    browserSync = require('browser-sync').create(),
+    ghPages     = require('gh-pages');
 
 gulp.task('jade', function() {
   gulp.src('./src/**/*.jade')
@@ -19,6 +20,12 @@ gulp.task('sass', function() {
     .pipe(minifyCss())
     .pipe(gulp.dest('./dist/styles'))
     .pipe(browserSync.stream());
+});
+
+gulp.task('build', ['jade', 'sass']);
+
+gulp.task('deploy', ['build'], function() {
+  ghPages.publish("dist");
 });
 
 gulp.task('serve', ['sass', 'jade'], function() {
